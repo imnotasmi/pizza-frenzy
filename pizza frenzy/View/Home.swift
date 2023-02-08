@@ -48,6 +48,10 @@ struct Home: View {
                 .foregroundColor(.gray)
             
             AnimatedSlider()
+           
+            
+            //selectCrust()
+           
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -58,11 +62,12 @@ struct Home: View {
         func AnimatedSlider() -> some View {
             GeometryReader { proxy in
                 let size = proxy.size
-                LazyHStack(spacing:15){
-                        VStack(spacing:10) {
+                
+            LazyHStack(spacing:15){
+                        VStack(spacing:5) {
                             Text(SelectedPizza.pizzaTitle)
                                 .font(.largeTitle.bold())
-                                
+
                             Text(SelectedPizza.description)
                                 .font(.callout)
                                 .padding(.top,10)
@@ -70,8 +75,14 @@ struct Home: View {
                                 .foregroundColor(.white .opacity(0.8))
                                 .multilineTextAlignment(.center)
                         .frame(width: size.width, height: size.height, alignment: .top)
+
                     }
+
                 }
+                
+                selectCrust(crustType:crust, crustIndex: 0)
+                    .padding(.top,100)
+                    .padding(.horizontal)
                 pizzaView()
                     .padding(.top,120)
             }
@@ -79,11 +90,54 @@ struct Home: View {
             .padding(.top,30)
         }
     
+  
+    struct selectCrust:View {
+        var crustType : [Crust]
+        @State var crustIndex:Int
+        var body : some View{
+            VStack{
+                Text("Select  Crust")
+                    .opacity(0.5)
+                    //.padding(.top)
+                    .multilineTextAlignment(.center)
+                
+                HStack(spacing: 30){
+                            ForEach(crustType) { index in
+                                Text("\(index.name)")
+                                    .multilineTextAlignment(.center)
+                                // .fontWeight(.bold)
+                                    .padding(.horizontal,10)
+                                
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                            
+                                            .strokeBorder(self.crustIndex == index.id ?.white : .gray.opacity(0.7))
+                                            //.shadow(self.crustIndex == index.id ? (color: .white,radius: 0.5) : (color: .white,radius: 0))
+                                            
+                                            .frame(width: 80, height: 50)
+                                    )
+                                    .padding(10)
+                                    .onTapGesture {
+                                        withAnimation(.default){
+                                            crustIndex = index.id
+                                           
+                                        }
+                                        print(crustIndex)
+                                   
+
+                                }
+                            }
+                }
+            }
+        }
+        
+    }
+    
     @ViewBuilder
     func pizzaView()-> some View {
         GeometryReader { proxy in
             let size = proxy.size
-            
+
             ZStack{
                // Text("\(size.width/2)")
                 if pizzas.first?.id != SelectedPizza.id{
@@ -104,8 +158,8 @@ struct Home: View {
                         .rotationEffect(.init(degrees: 30))
                         .offset(x:size.width/2,y:-38)
                 }
-                
-                    
+
+
                 ZStack(alignment: .center){
                     Text(attributedString(value:SelectedPizza.price))
                         .font(.largeTitle.bold())
@@ -113,9 +167,9 @@ struct Home: View {
                         //.rec
 
                 }
-                 
+
                 .offset(y:size.height-570)
-                
+
                 Image(SelectedPizza.pizzaImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -129,9 +183,9 @@ struct Home: View {
                                 let index = getIndex(pizza: SelectedPizza)
                                 let translation = value.translation.width
                                 print(translation)
-                                
+
                                 if animatePizza{return}
-                                
+
                                 if translation > 0 && translation < 50 &&
                                     index > 0
                                 {
@@ -153,7 +207,7 @@ struct Home: View {
 //                        .aspectRatio(contentMode: .fill))
 
             }
-            
+
 
         }
         .padding(.top)
@@ -205,3 +259,39 @@ struct Home_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+extension View {
+    func glow(color: Color = .white, radius: CGFloat = 20) -> some View {
+        self
+            .shadow(color: color, radius: radius / 3)
+           .shadow(color: color, radius: radius / 3)
+//            .shadow(color: color, radius: radius / 3)
+    }
+}
+
+//HStack{
+//    Text("Hello")
+//        .padding(.horizontal)
+//        .padding(.top)
+//        .overlay(
+//            Path { path in
+//                path.move(to: CGPoint(x: 0, y: 0))
+//                path.addLine(to: CGPoint(x: size.width, y: 0))
+//                path.addLine(to: CGPoint(x: size.width, y: 40))
+//                path.addLine(to: CGPoint(x: 0, y: 40))
+//                path.addLine(to: CGPoint(x: 0, y: 0))
+//
+//    }
+//    .stroke(Color.gray, lineWidth: 2)
+//            )
+//
+//}
+//Path{ path in
+//                                    path.move(to: .zero)
+//                                    path.addLine(to: CGPoint(x: size.width*0.32, y: 0))
+//                                    path.addLine(to: CGPoint(x: size.width*0.32, y: 30))
+//                                    path.addLine(to: CGPoint(x: size.width*0, y: 30))
+//                                    path.addLine(to: CGPoint(x: size.width*0, y: 0))
+                                    
+                                //}
+                                    //.stroke(lineWidth: 0.8)

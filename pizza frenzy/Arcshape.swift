@@ -2,7 +2,7 @@
 //  Arcshape.swift
 //  pizza frenzy
 //
-//  Created by ASMI iOS Dev on 26/01/23.
+//  Created by ASMI on 26/01/23.
 //
 
 import SwiftUI
@@ -20,13 +20,21 @@ struct Arcshape: Shape{
         return path
         
     }
-    
-    
-    
+      
 }
 
-//struct Arcshape_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Arcshape()
+//struct RectanglewithCurve: Shape{
+//    func path(in rect: CGRect) -> Path {
+//        var path = Path()
+//        let width = rect.width
+//       
+//        return path
+//        
+//            
+//        
 //    }
+//    
 //}
+
+
+
